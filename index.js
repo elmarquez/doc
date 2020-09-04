@@ -1,4 +1,5 @@
 const glob = require('glob');
+const hasha = require('hasha');
 const path = require('path');
 const pkg = require('./package.json');
 const Promise = require('bluebird');
@@ -22,7 +23,11 @@ function connectToDatabase(dbPath) {
   });  
   // define data models
   const Document = conn.define('Document', {
-      filename: {
+    path: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    filename: {
         type: DataTypes.STRING,
         allowNull: false
       },
@@ -33,9 +38,6 @@ function connectToDatabase(dbPath) {
       hash: {
         type: DataTypes.STRING,
         allowNull: false  
-      },
-      lastModified: {
-        type: DataTypes.STRING
       },
       lastModified: {
         type: DataTypes.STRING
@@ -81,22 +83,31 @@ function init(argv) {
  */
 function update(argv) {
   console.info(`Searching '${argv.path} for documents ...`);
+  const cwd = argv.path;
   connectToDatabase(argv.database)
     .then(async function (cfg) {
       const tinyopts = {
         absolute: false,
-        cwd: argv.path,
+        cwd,
         filesOnly: true,
       };
       const files = await tinyglob('**/*.{pdf}', tinyopts);
       return Promise.resolve({...cfg, files});
     })
     .then(function (cfg) {
-      console.info('files', cfg.files);
+      return Promise.map(cfg.files, updateFile(cfg.conn, cfg.Document, cwd));
     })
     .catch(function (err) {
       console.error(err);
     });
+}
+
+function updateFile(db, Document, cwd) {
+  return async function (file) {
+    const fp = path.join(cwd, file);
+    const hash = await hasha.fromFile(fp, {algorithm: 'md5'});
+    console.info(hash, file);
+  }
 }
 
 //-----------------------------------------------------------------------------
