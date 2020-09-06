@@ -1,4 +1,3 @@
-const glob = require('glob');
 const hasha = require('hasha');
 const path = require('path');
 const pkg = require('./package.json');
@@ -19,15 +18,22 @@ function connectToDatabase(dbPath) {
   const conn = new Sequelize({
     dialect: 'sqlite',
     dialectOptions: {},
-    storage: dbPath
+    logging: console.log,
+    retry: {
+      max: 10
+    },
+    storage: dbPath,
+    transactionType: 'IMMEDIATE'
   });  
   // define data models
   const Document = conn.define('Document', {
-    path: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    filename: {
+      path: {
+        allowNull: false,
+        primaryKey: true,
+        type: DataTypes.STRING,
+        unique: true
+      },
+      filename: {
         type: DataTypes.STRING,
         allowNull: false
       },
@@ -36,20 +42,28 @@ function connectToDatabase(dbPath) {
         allowNull: false  
       },
       hash: {
+        allowNull: false,
         type: DataTypes.STRING,
-        allowNull: false  
+        unique: true
       },
       lastModified: {
         type: DataTypes.STRING
       },
       tags: {
-        type: DataTypes.ARRAY(DataTypes.STRING)
+        get: function () {
+          this.getDataValue('tags').split('\n');
+        },
+        set: function (arr) {
+          this.setDataValue('tags', arr.join('\n'));
+        },
+        type: DataTypes.STRING
       },
     },
     {
-      // Other model options go here
+      tableName: 'Documents'
     }
   );
+  conn.sync();
   return Promise.resolve({conn, Document});
 }
 
@@ -86,33 +100,53 @@ function update(argv) {
   const cwd = argv.path;
   connectToDatabase(argv.database)
     .then(async function (cfg) {
-      const tinyopts = {
+      const options = {
         absolute: false,
         cwd,
         filesOnly: true,
       };
-      const files = await tinyglob('**/*.{pdf}', tinyopts);
+      const files = await tinyglob('**/*.{pdf}', options);
       return Promise.resolve({...cfg, files});
     })
     .then(function (cfg) {
-      return Promise.map(cfg.files, updateFile(cfg.conn, cfg.Document, cwd));
+      return Promise.map(cfg.files, updateFile(cfg.Document, cwd), {concurrency: 2});
     })
     .catch(function (err) {
       console.error(err);
     });
 }
 
-function updateFile(db, Document, cwd) {
+/**
+ * Update or create document record.
+ * @param {object} Document - Document model
+ * @param {string} cwd - Library root
+ */
+function updateFile(Document, cwd) {
   return async function (file) {
+    console.info('file', file, cwd);
     const fp = path.join(cwd, file);
     const hash = await hasha.fromFile(fp, {algorithm: 'md5'});
-    console.info(hash, file);
+    const where = { path: file };
+    const defaults = {
+      path: file, 
+      filename: path.basename(file),
+      extension: path.extname(file),
+      hash,
+      tags: []
+    };
+    try {
+      const [doc, created] = Document.findOrCreate({where, defaults});
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 
 //-----------------------------------------------------------------------------
 // Parse and execute command
 
+// TODO add --debug flag to all commands to enable console logging
+// TODO add --progress flag to all commands
 yargs
   .scriptName("lib")
   .usage('$0 <cmd> [args]')

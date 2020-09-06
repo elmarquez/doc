@@ -1,0 +1,13 @@
+{
+    "console": "integratedTerminal",
+    "cwd": "${workspaceRoot}",
+    "internalConsoleOptions": "neverOpen",
+    "name": "Debug server.js via nodemon",
+    "request": "launch",
+    "restart": true,
+    "runtimeArgs": [ "--debug=5858" ],
+    "runtimeExecutable": "nodemon",
+    "port": 5858,
+    "program": "${workspaceRoot}/index.js",
+    "type": "node"
+}
