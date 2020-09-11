@@ -1,9 +1,12 @@
 {
-  "name": "indexer",
+  "name": "doc",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Research tools",
+  "bin": {
+    "doc": "./index.js"
+  },
   "scripts": {
+    "release": "echo \"Error: no release script specified\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Davis M. Marques",
