@@ -1,6 +1,28 @@
 ## TODO
 
-* get rid of ansi library
+
+## Command Modules
+
+- Bibliography (bib)
+    - Add
+        - add DOI and URN values to records section
+    - Get
+        x download the example records
+        - need to demonstrate both publications and datasets
+        - need to distinguish types of things in records
+    - Remove
+    - Search
+- Library (lib)
+    - init
+    - update all, single file
+    - add
+    - remove
+    - search
+- Project
+    - init
+    - run (script)
+    - search, alias for library/search
+
 
 https://arxiv.org/abs/1712.02734
 
@@ -34,16 +56,6 @@ https://arxiv.org/abs/1712.02734
     - In most cases, we should terminate the command
     - Display error in red w an error code
 
-
-## Command Modules
-
-Add
-    - add DOI and URN values to records section
-
-Get
-    x download the example records
-    - need to demonstrate both publications and datasets
-    - need to distinguish types of things in records
 
 
 ## Planning
