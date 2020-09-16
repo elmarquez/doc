@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 const {bibliography, constants, library, project} = require('./lib');
 const path = require('path');
+const pkg = require('./package.json');
 const yargs = require('yargs');
 
 // Parse and execute command
 // TODO add --debug flag to all commands to enable console logging
 // TODO add --progress flag to all commands
 yargs
-  .scriptName("lib")
+  .scriptName(pkg.name)
   .usage('$0 <cmd> [args]')
-  .command('config', 'Configure document indexing options', library.config)
+  .command('config', 'Configure options', project.config)
   .command('export', 'Export document index in a specified format', (yargs) => {
     yargs
       .choices('format', ['csv', 'json', 'sql', 'yaml'])
@@ -23,8 +24,14 @@ yargs
         describe: 'export file path',
         type: 'string',
       });
-  }, library.exportToFile)
-  .command('init', 'Initialize the project directory', project.init)
+    }, library.exportToFile)
+  .command('init', 'Initialize the project directory', function(yargs) {
+      yargs.option('path', {
+        default: process.cwd(),
+        describe: 'project directory path',
+        type: 'string',
+      });
+    }, project.init)
   .command('update', 'Create or update document index', (yargs) => {
     yargs
       .coerce('database', path.resolve)

@@ -19,5 +19,8 @@
     "sqlite3": "^5.0.0",
     "tiny-glob": "^0.2.6",
     "yargs": "^15.4.1"
+  },
+  "devDependencies": {
+    "husky": "^4.3.0"
   }
 }
