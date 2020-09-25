@@ -1,4 +1,7 @@
+const constants = require('../../lib/constants');
+const fs = require('fs');
 const lib = require('../../lib/library');
+const path = require('path');
 
 describe('lib', function() {
     describe('library', function() {
@@ -6,8 +9,24 @@ describe('lib', function() {
 
         });
         describe('purge', function() {
-            it('clears all contents from the database', function() {
-                fail();
+            let dbpath = null;
+
+            after(async function(done) {
+                
+            });
+
+            before(async function(done) {
+
+            });
+
+            it('clears all contents from the database', function(done) {
+                // FIXME partial test
+                const cmd = {
+                    path: fs.mkdtempSync() 
+                };
+                lib.purge(cmd)
+                    .then(() => done())
+                    .catch(err => fail);
             });
         });
         describe('update', function() {

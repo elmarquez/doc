@@ -7,7 +7,7 @@
   },
   "scripts": {
     "release": "echo \"Error: no release script specified\" && exit 1",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/jasmine --config=test/jasmine.json"
   },
   "author": "Davis M. Marques",
   "license": "CC-BY-SA-4.0",
@@ -21,6 +21,9 @@
     "yargs": "^15.4.1"
   },
   "devDependencies": {
-    "husky": "^4.3.0"
+    "chai": "^4.2.0",
+    "husky": "^4.3.0",
+    "jasmine": "^3.6.1",
+    "jasmine-spec-reporter": "^6.0.0"
   }
 }

@@ -32,6 +32,23 @@ yargs
         type: 'string',
       });
     }, project.init)
+  .command('library <cmd>', 'Document library', function(yargs) {
+    yargs
+      .command('info', 'Display file information', (y) => library.info(y.argv))
+      .command('purge', 'Purge index', (y) => library.purge(y.argv))
+      .command('update', 'Update the index', (y) => library.update(y.argv))
+      .choices('changes', ['added', 'all', 'deleted', 'updated'])
+      .option('changes', {
+        default: 'updated',
+        describe: 'List files that have changed',
+        type: 'string',
+      })
+      .option('path', {
+        default: process.cwd(),
+        describe: 'project directory path',
+        type: 'string',
+      });
+  })
   .command('update', 'Create or update document index', (yargs) => {
     yargs
       .coerce('database', path.resolve)

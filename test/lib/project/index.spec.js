@@ -1,5 +1,3 @@
-const { describe, fail } = require("yargs");
-
 describe('lib', function() {
     describe('project', function() {
         describe('init', function() {
