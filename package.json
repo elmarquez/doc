@@ -24,6 +24,7 @@
     "chai": "^4.2.0",
     "husky": "^4.3.0",
     "jasmine": "^3.6.1",
-    "jasmine-spec-reporter": "^6.0.0"
+    "jasmine-spec-reporter": "^6.0.0",
+    "nodejs-fs-utils": "^1.2.5"
   }
 }

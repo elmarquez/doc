@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const {bibliography, constants, library, project} = require('./lib');
+const {bib, config, constants, library, project} = require('./lib');
 const path = require('path');
 const pkg = require('./package.json');
 const yargs = require('yargs');
@@ -10,21 +10,8 @@ const yargs = require('yargs');
 yargs
   .scriptName(pkg.name)
   .usage('$0 <cmd> [args]')
-  .command('config', 'Configure options', project.config)
-  .command('export', 'Export document index in a specified format', (yargs) => {
-    yargs
-      .choices('format', ['csv', 'json', 'sql', 'yaml'])
-      .option('format', {
-        default: 'json',
-        describe: 'file format',
-        type: 'string',
-      })
-      .option('path', {
-        default: process.cwd(),
-        describe: 'export file path',
-        type: 'string',
-      });
-    }, library.exportToFile)
+  .command('bib <cmd>', 'Bibliography', bib.command)
+  .command('config', 'Configure options', config.command)
   .command('init', 'Initialize the project directory', function(yargs) {
       yargs.option('path', {
         default: process.cwd(),
@@ -32,23 +19,7 @@ yargs
         type: 'string',
       });
     }, project.init)
-  .command('library <cmd>', 'Document library', function(yargs) {
-    yargs
-      .command('info', 'Display file information', (y) => library.info(y.argv))
-      .command('purge', 'Purge index', (y) => library.purge(y.argv))
-      .command('update', 'Update the index', (y) => library.update(y.argv))
-      .choices('changes', ['added', 'all', 'deleted', 'updated'])
-      .option('changes', {
-        default: 'updated',
-        describe: 'List files that have changed',
-        type: 'string',
-      })
-      .option('path', {
-        default: process.cwd(),
-        describe: 'project directory path',
-        type: 'string',
-      });
-  })
+  .command('library <cmd>', 'Document library', library.command)
   .command('update', 'Create or update document index', (yargs) => {
     yargs
       .coerce('database', path.resolve)
@@ -64,6 +35,11 @@ yargs
         type: 'string',
       });
   }, library.update)
+  .alias('bib', 'b')
+  .alias('config', 'c')
+  .alias('library', 'l')
+  .alias('library', 'lib')
+  .alias('update', 'u')
   .epilogue('Documentation is available online at https://elmarquez.github.io/doc')
   .help()
   .version(constants.PACKAGE_VERSION)
