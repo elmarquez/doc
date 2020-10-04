@@ -42,14 +42,12 @@ describe('lib / library', function() {
     });
 
     describe('update', function() {
-
         beforeEach(function(done) {
             fsutils.copy(state1, tmp, function (err) {
                 if (err) console.error(err);
                 done();
             });
         });
-
         it('updates the file index', function(done) {
             const args = { path: tmp, database: join(tmp, DEFAULT_DATABASE_FILENAME) };
             library
