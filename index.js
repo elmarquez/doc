@@ -4,15 +4,14 @@ const path = require('path');
 const pkg = require('./package.json');
 const yargs = require('yargs');
 
-// Parse and execute command
-// TODO add --debug flag to all commands to enable console logging
-// TODO add --progress flag to all commands
 yargs
   .scriptName(pkg.name)
   .usage('$0 <cmd> [args]')
+  .command('add <uri>', 'Add document to library', (yargs) => console.info(yargs))
   .command('bib <cmd>', 'Bibliography', bib.command)
   .command('config', 'Configure options', config.command)
-  .command('init', 'Initialize the project directory', function(yargs) {
+  .command('get <uri>', 'Get document', (yargs) => console.info(yargs))
+  .command('init', 'Initialize project directory', function(yargs) {
       yargs.option('path', {
         default: process.cwd(),
         describe: 'project directory path',
@@ -20,7 +19,9 @@ yargs
       });
     }, project.init)
   .command('library <cmd>', 'Document library', library.command)
-  .command('update', 'Create or update document index', (yargs) => {
+  .command('open <uri>', 'Open document in viewer', (yargs) => console.info(yargs))
+  .command('search <query>', 'Search for publications', (yargs) => console.info(yargs))
+  .command('update', 'Update the library index', (yargs) => {
     yargs
       .coerce('database', path.resolve)
       .coerce('path', path.resolve)

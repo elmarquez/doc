@@ -1,20 +1,18 @@
-DOC, the research publication manager
-=====================================
+DOC - powertools for research
+=============================
 
-Discover, download, and share bibliographies and research content quickly, and
-easily. Work as a team. Make your research reproducible with trivial effort.
+Powertools for research.
+
+- Discover, download, and share bibliographies and research content quickly,
+and easily. Work as a team. Make your research reproducible with trivial
+effort.
+- Catalog and organize your collections of research papers, datasets and imagery.
+- Import and export bibliographies with ease.
+- Integrates with your Word or Latex workflows
+- Generate citations on demand
 
 This is a BETA release of the application and associated search infrastructure
 for demonstration purposes.
-
-
-## Dependencies
-
-This project requires NodeJS 12 or greater to be available in the environment.
-
-Install all application dependencies:
-
-    npm install
 
 
 ## Install
@@ -23,21 +21,26 @@ Install the application in your local environment:
 
     install -g @elmarquez/doc
 
-Once installed, you will be able 
+Once installed, a script will be installed at:
 
-    doc
+    /usr/local/bin/doc
+
+Execute the command to start:
+
+    doc --help
 
 
-## Test
+## Developing
 
-Run command unit tests:
+Requires NodeJS 12. Install all application dependencies:
+
+    npm install
+
+Run the test suite:
 
     npm test
-    
 
-## Release
-
-Create a new release candidate, tag the repo:
+Update the package version number, commit and tag the update:
 
     npm release
 
@@ -53,13 +56,3 @@ governing participation in the project.
 
 This project is made available under the MIT License. See the LICENSE file for
 details.
-A utility to index a collection of research documents and associated files. Librarian extracts and writes metadata to a local SqlLite database where it can be queried and examined by other tools.
-
-
-## TODO Tasks
-
-- extract words from PDF documents and store them in an inverted index
-- identify files that have changed since the last run
-- generate pdf, image thumbnails?
-- tag documents
-- export to JSON, YAML, etc. 

@@ -22,6 +22,10 @@ describe('lib / library / database ', function() {
     });
 
     describe('connect', function() {
+        it('returns a promise', function() {
+            const promise = db.connect(tmp);
+            expect(promise).to.have.property('then');
+        });
         it('creates a connection to the database', function(done) {
             db.connect(tmp).then(function(conn) {
                 expect(conn).to.exist;
@@ -39,12 +43,7 @@ describe('lib / library / database ', function() {
 
     describe('getDocumentIdentifiers', function() {
         it('returns a list with document path, hash for each entry', function(done) {
-            db
-                .connect(tmp)
-                .then(function(conn) {
-                    // TODO index the directory first
-                    return db.getDocumentIdentifiers(conn);
-                })
+            db.getDocumentIdentifiers(tmp)
                 .then(function(files) {
                     expect(Array.isArray(files)).to.be.true;
                     done();
@@ -64,6 +63,10 @@ describe('lib / library / database ', function() {
             });
         });
 
+        it('returns a promise', function() {
+            const promise = db.purge(tmp);
+            expect(promise).to.have.property('then');
+        });
         it('clears all contents from the database', function(done) {
             return db
                 .connect(tmp)
@@ -77,6 +80,5 @@ describe('lib / library / database ', function() {
                 .catch((err) => fail(err));
         }, 10000);
     });
-
 
 });

@@ -1,3 +1,4 @@
+const Promise = require('bluebird');
 const { expect } = require('chai');
 const constants = require('../../../lib/constants');
 const db = require('../../../lib/library/database');
@@ -45,7 +46,7 @@ describe('lib / library / files', function() {
         });
     });
 
-    describe('getAddedFiles', function() {
+    xdescribe('getAddedFiles', function() {
         let tmp = null;
         beforeEach(function(done) {
             fs.mkdtemp(`${os.tmpdir()}${sep}test-`, function(err, dtemp) {
@@ -69,6 +70,7 @@ describe('lib / library / files', function() {
                     return lib.update(cfg);
                 })
                 .then(function(stats) {
+                    expect(stats.added).to.equal(3);
                     expect(stats.count).to.equal(3);
                     done();
                 })
@@ -78,21 +80,63 @@ describe('lib / library / files', function() {
         }, 10000);
     });
 
-    xdescribe('getCurrentFiles', function() {
-        afterEach(function(done) {
-            
-        });
-        beforeEach(function(done) {
+    describe('getCurrentFiles', function() {
 
+        const result = [
+            { path: '/library/file1.pdf', hash: '1' },
+            { path: '/library/file2.pdf', hash: '2' },
+            { path: '/library/file3.pdf', hash: '3' },
+        ];
+
+        beforeEach(function() {
+            spyOn(db, 'getDocumentIdentifiers').and.returnValue(Promise.resolve(result));
         });
-        it('returns the list of file paths, hashes in the current index', function() {
-            fail();
+
+        it('returns the list of file paths, hashes in the current index', function(done) {
+            files
+                .getCurrentFiles('/path/to/library')
+                .then(function(arr) {
+                    expect(arr).to.deep.equal(result);
+                    done();
+                })
+                .catch(function(err) {
+                    fail(err);
+                });
         });
     });
 
-    xdescribe('getDeletedFiles', function() {
-        it('returns the list of deleted files', function() {
-            fail();
+    describe('getDeletedFiles', function() {
+
+        const afterState = [
+            { path: '/test3.pdf', hash: '1' }
+        ];
+        const beforeState = [
+            { path: '/test1.pdf', hash: '1' },
+            { path: '/test2.pdf', hash: '1' },
+            { path: '/test3.pdf', hash: '1' }
+        ];
+        let tmp = null;
+
+        beforeEach(function(done) {
+            spyOn(db, 'getDocumentIdentifiers').and.returnValue(Promise.resolve(beforeState));
+            fs.mkdtemp(`${os.tmpdir()}${sep}test-`, function(err, dtemp) {
+                if (err) throw new Error(err);
+                tmp = dtemp;
+                copyDir(state2, tmp).then(() => done()).catch((err) => fail(err));
+            });
+        });
+
+        it('returns the list of deleted files', function(done) {
+            files
+                .getDeletedFiles(tmp)
+                .then(function(deletedFiles) {
+                    expect(deletedFiles).to.deep.equal(afterState);
+                    done();
+                })
+                .catch(function(err) {
+                    console.error(err);
+                    fail(err);
+                });
         });
     });
 
