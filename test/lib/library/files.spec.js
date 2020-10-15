@@ -47,37 +47,36 @@ describe('lib / library / files', function() {
     });
 
     xdescribe('getAddedFiles', function() {
+        const afterState = [
+            { path: '/test3.pdf', hash: '1' }
+        ];
+        const beforeState = [
+            { path: '/test1.pdf', hash: '1' },
+            { path: '/test2.pdf', hash: '1' },
+        ];
         let tmp = null;
+
         beforeEach(function(done) {
+            spyOn(db, 'getDocumentIdentifiers').and.returnValue(Promise.resolve(beforeState));
             fs.mkdtemp(`${os.tmpdir()}${sep}test-`, function(err, dtemp) {
                 if (err) throw new Error(err);
                 tmp = dtemp;
-                done();
+                copyDir(state1, tmp).then(() => done()).catch((err) => fail(err));
             });
         });
-        it('returns the list of new files', function(done) {
-            const cfg = {
-                path: tmp,
-                database: join(tmp, constants.DEFAULT_DATABASE_FILENAME)
-            };
-            lib
-                .update(cfg)
-                .then(function(stats) {
-                    expect(stats.count).to.equal(0);
-                    return copyDir(state1, tmp);
-                })
-                .then(function() {
-                    return lib.update(cfg);
-                })
-                .then(function(stats) {
-                    expect(stats.added).to.equal(3);
-                    expect(stats.count).to.equal(3);
+
+        it('returns the list of added files', function(done) {
+            files
+                .getAddedFiles(tmp)
+                .then(function(addedFiles) {
+                    expect(addedFiles).to.deep.equal(afterState);
                     done();
                 })
                 .catch(function(err) {
+                    console.error(err);
                     fail(err);
                 });
-        }, 10000);
+        });
     });
 
     describe('getCurrentFiles', function() {
@@ -140,9 +139,26 @@ describe('lib / library / files', function() {
         });
     });
 
-    xdescribe('getFiles', function() {
-        it('get the list of files in a directory', function() {
-            fail();
+    describe('getFiles', function() {
+        const result = [ 'test1.pdf', 'test2.pdf', 'test3.pdf' ];
+        let tmp = null;
+        beforeEach(function(done) {
+            fs.mkdtemp(`${os.tmpdir()}${sep}test-`, function(err, dtemp) {
+                if (err) throw new Error(err);
+                tmp = dtemp;
+                copyDir(state1, tmp).then(() => done()).catch((err) => fail(err));
+            });
+        });
+        it('get the list of files in a directory', function(done) {
+            files
+                .getFiles(tmp, ['pdf']).then(function(files) {
+                    expect(files).to.deep.equal(result);
+                    done();
+                })
+                .catch(function(err) {
+                    console.error(err);
+                    fail(err);
+                });
         });
     });
 
