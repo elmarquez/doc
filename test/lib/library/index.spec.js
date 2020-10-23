@@ -41,7 +41,7 @@ describe('lib / library', function() {
         });    
     });
 
-    describe('update', function() {
+    xdescribe('update', function() {
         beforeEach(function(done) {
             fsutils.copy(state1, tmp, function (err) {
                 if (err) console.error(err);
