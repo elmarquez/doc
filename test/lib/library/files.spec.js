@@ -1,6 +1,5 @@
 const Promise = require('bluebird');
 const { expect } = require('chai');
-const Database = require('../../../lib/library/database');
 const files = require('../../../lib/library/files');
 const fs = require('fs');
 const os = require('os');
@@ -116,10 +115,7 @@ describe('lib / library / files', function() {
                     expect(deletedFiles[0]).to.deep.equal(afterState[0]);
                     done();
                 })
-                .catch(function(err) {
-                    console.error(err);
-                    fail(err);
-                });
+                .catch(fail);
         });
     });
 
@@ -136,22 +132,47 @@ describe('lib / library / files', function() {
         });
 
         it('get the list of files in a directory', function(done) {
-            files
-                .getFiles(tmp, ['pdf']).then(function(files) {
+            files.getFiles(tmp).then(function(files) {
                     expect(files).to.deep.equal(result);
                     done();
                 })
-                .catch(function(err) {
-                    console.error(err);
-                    fail(err);
-                });
+                .catch(fail);
         });
     });
 
-    xdescribe('getUpdatedFiles', function() {
-        it('get the list of files that have chnaged', function() {
-            fail();
+    describe('getUpdatedFiles', function() {
+        const docs = [
+            { path: 'test1.pdf', hash: 'abcdef', lastModified: '1997-01-01T01:01:01.000Z' },
+            { path: 'test2.pdf', hash: 'abcdef', lastModified: '1997-01-01T01:01:01.000Z' },
+            { path: 'test3.pdf', hash: 'abcdef', lastModified: '1997-01-01T01:01:01.000Z' },
+            { path: 'test4.pdf', hash: 'abcdef', lastModified: '1997-01-01T01:01:01.000Z' },
+        ];
+        let tmp = null;
+
+        beforeEach(function(done) {
+            fs.mkdtemp(`${os.tmpdir()}${sep}test-`, function(err, dtemp) {
+                if (err) throw new Error(err);
+                tmp = dtemp;
+                copyDir(state1, tmp).then(() => done()).catch((err) => fail(err));
+            });
         });
+        it('get the list of files that have changed', function(done) {
+            const db = {
+                getDocument: function(f) {
+                    const doc = docs.reduce(function (dd, d) {
+                        return f.path === d.path ? d : dd;
+                    }, null);
+                    return Promise.resolve(doc);
+                },
+                getFiles: () => Promise.resolve(docs),
+            };
+            files.getUpdatedFiles(db, tmp).then(function(updated) {
+                expect(Array.isArray(updated)).to.be.true;
+                expect(updated.length).to.equal(docs.length - 1);
+                done();
+            })
+            .catch(fail);
+        }, 20000000);
     });
 
 });

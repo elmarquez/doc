@@ -97,11 +97,11 @@ describe('lib / library / database ', function() {
         });
     });
 
-    describe('getPath', function() {
+    describe('getProjectPath', function() {
         it('gets the database file path', function() {
             const db = new Database(tmp);
-            const p = db.getPath();
-            expect(p).to.contain(tmp);
+            const p = db.getProjectPath();
+            expect(p).to.equal(tmp);
         });
     });
 
