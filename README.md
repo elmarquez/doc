@@ -14,6 +14,11 @@ effort.
 This is a BETA release of the application and associated search infrastructure
 for demonstration purposes.
 
+Take a look at our project kanban for information on work in progress and
+planned updates.
+
+    https://github.com/users/elmarquez/projects/1
+
 
 ## Install
 
