@@ -27,7 +27,7 @@ yargs
     y
       .coerce('database', path.resolve)
       .coerce('path', (p) => {
-        // if the path includes a user home reference ~ then expand it to an
+        // if the path starts with a user home reference ~ then expand it to an
         // absolute path
         if (p.length > 0 && p[0] === '~') {
           p = path.join(os.homedir(), p.substring(1));

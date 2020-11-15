@@ -1,12 +1,14 @@
-DOC - powertools for research
+doc - powertools for research
 =============================
 
 Powertools for research.
 
-- Work as a team and make your research reproducible with trivial effort
 - Discover, download, and share bibliographies and research data easily
 - Catalog and organize your collections of papers, datasets and imagery
+- Work as a team and make your research reproducible with less effort
 - Generate citations on demand
+- Publish a research blog
+- Automate mundane research tasks
 - Import and export bibliographies with ease
 - Integrates with your Word or Latex workflows
 
@@ -23,13 +25,13 @@ planned updates.
 
 Install the application in your local environment:
 
-    install -g @elmarquez/doc
+    npm install -g @elmarquez/doc
 
 Once installed, a script will be installed at:
 
     /usr/local/bin/doc
 
-Execute the command to start:
+Display help information:
 
     doc --help
 
