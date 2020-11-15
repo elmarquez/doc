@@ -3,13 +3,12 @@ DOC - powertools for research
 
 Powertools for research.
 
-- Discover, download, and share bibliographies and research content quickly,
-and easily. Work as a team. Make your research reproducible with trivial
-effort.
-- Catalog and organize your collections of research papers, datasets and imagery.
-- Import and export bibliographies with ease.
-- Integrates with your Word or Latex workflows
+- Work as a team and make your research reproducible with trivial effort
+- Discover, download, and share bibliographies and research data easily
+- Catalog and organize your collections of papers, datasets and imagery
 - Generate citations on demand
+- Import and export bibliographies with ease
+- Integrates with your Word or Latex workflows
 
 This is a BETA release of the application and associated search infrastructure
 for demonstration purposes.

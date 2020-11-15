@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const {bib, config, constants, library, project} = require('./lib');
+const os = require('os');
 const path = require('path');
 const pkg = require('./package.json');
 const yargs = require('yargs');
@@ -25,7 +26,14 @@ yargs
   .command('update', 'Update the library index', (y) => {
     y
       .coerce('database', path.resolve)
-      .coerce('path', path.resolve)
+      .coerce('path', (p) => {
+        // if the path includes a user home reference ~ then expand it to an
+        // absolute path
+        if (p.length > 0 && p[0] === '~') {
+          p = path.join(os.homedir(), p.substring(1));
+        }
+        return path.resolve(path.normalize(p));
+      })
       .option('database', {
         default: path.join(process.cwd(), constants.DEFAULT_DATABASE_FILENAME),
         describe: 'path to the database file',
