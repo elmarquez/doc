@@ -9,7 +9,7 @@ yargs
   .scriptName(pkg.name)
   .version(constants.PACKAGE_VERSION)
   .usage('$0 <cmd> [args]')
-  .command('add <uri>', 'Add document to library', (y) => console.info(y))
+  .command('add <uri>', 'Add publication to bibliography', () => {}, (y) => bib.add(y))
   .command('bib <cmd>', 'Bibliography', bib.command)
   .command('config', 'Configure options', config.command)
   .command('get <uri>', 'Get document', (y) => console.info(y))

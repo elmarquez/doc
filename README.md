@@ -15,11 +15,6 @@ Powertools for research.
 This is a BETA release of the application and associated search infrastructure
 for demonstration purposes.
 
-Take a look at our project kanban for information on work in progress and
-planned updates.
-
-    https://github.com/users/elmarquez/projects/1
-
 
 ## Install
 
@@ -50,14 +45,19 @@ Update the package version number, commit and tag the update:
 
     npm release
 
-    
+
 ## Contributing
 
 doc is a community driven, open source project. We accept pull requests for
 new features and bug fixes. Please see the CODE_OF_CONDUCT.md file for rules
 governing participation in the project.
 
-    
+To participate, start by taking a look at our project kanban for information on
+planned features and work in progress.
+
+    https://github.com/users/elmarquez/projects/1
+
+
 ## License
 
 This project is made available under the MIT License. See the LICENSE file for

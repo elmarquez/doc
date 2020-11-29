@@ -1,4 +1,4 @@
-xdescribe('lib / project', function() {
+describe('lib / project', function() {
 
     describe('init', function() {
         describe('git repository', function() {
@@ -19,5 +19,16 @@ xdescribe('lib / project', function() {
         });
     });
 
+    describe('readProjectJson', function() {
+        it('returns a JavaScript object if the file is found and the data is parsed successfully', function() {
+           expect(1).to.equal(-1);
+        });
+        it('fails if the file can not be found', function() {
+            expect(1).to.equal(-1);
+        });
+        it('fails if the file can not be parsed', function() {
+            expect(1).to.equal(-1);
+        });
+    });
 
 });

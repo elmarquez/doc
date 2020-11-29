@@ -1,7 +1,7 @@
 {
   "name": "doc",
   "version": "0.1.0",
-  "description": "Research tools",
+  "description": "Research power tools",
   "bin": {
     "doc": "./index.js"
   },
@@ -12,8 +12,12 @@
   "author": "Davis M. Marques",
   "license": "CC-BY-SA-4.0",
   "dependencies": {
+    "@elmarquez/bibtex": "git+https://github.com/elmarquez/bibtex.git",
     "bluebird": "^3.7.2",
+    "got": "^11.8.0",
     "hasha": "^5.2.0",
+    "log-symbols": "^4.0.0",
+    "log-utils": "^1.0.0",
     "progress": "^2.0.3",
     "sequelize": "^6.3.4",
     "sqlite3": "^5.0.0",
